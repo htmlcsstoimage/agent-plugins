@@ -247,8 +247,78 @@ function resolveMarketplaceSource(source, pluginRoot) {
   return `${normalizedRoot}/${normalizedSource}`;
 }
 
+async function validatePluginDirectory(pluginDir, expectedName, pluginManifest) {
+  const pluginName = pluginManifest.name || expectedName;
+
+  if (typeof pluginManifest.name !== "string" || !pluginNamePattern.test(pluginManifest.name)) {
+    addError(
+      `${expectedName}: "name" in plugin.json must be lowercase and use only alphanumerics, hyphens, and periods.`
+    );
+  }
+
+  if (pluginManifest.name?.includes("--") || pluginManifest.name?.includes("..")) {
+    addError(`${expectedName}: "name" in plugin.json cannot contain consecutive hyphens or periods.`);
+  }
+
+  if (pluginManifest.name && pluginManifest.name !== expectedName) {
+    addError(
+      `${expectedName}: marketplace entry name does not match plugin.json name ("${pluginManifest.name}").`
+    );
+  }
+
+  for (const field of ["displayName", "version", "description", "license"]) {
+    if (typeof pluginManifest[field] !== "string" || pluginManifest[field].trim().length === 0) {
+      addError(`${pluginName}: "${field}" is required in plugin.json.`);
+    }
+  }
+
+  if (!pluginManifest.author || typeof pluginManifest.author.name !== "string" || pluginManifest.author.name.length === 0) {
+    addError(`${pluginName}: "author.name" is required in plugin.json.`);
+  }
+
+  if (!Array.isArray(pluginManifest.keywords) || pluginManifest.keywords.length === 0) {
+    addError(`${pluginName}: "keywords" must be a non-empty array in plugin.json.`);
+  }
+
+  const manifestFields = ["logo", "rules", "skills", "agents", "commands", "hooks", "mcpServers"];
+  for (const field of manifestFields) {
+    const values = extractPathValues(pluginManifest[field]);
+    for (const value of values) {
+      await validateReferencedPath(pluginDir, field, value, pluginName);
+    }
+  }
+
+  await validateComponentFrontmatter(pluginDir, pluginName);
+
+  const mcpPath = path.join(pluginDir, "mcp.json");
+  if (await pathExists(mcpPath)) {
+    const mcpConfig = await readJsonFile(mcpPath, `${pluginName} MCP configuration`);
+    if (!mcpConfig?.mcpServers || typeof mcpConfig.mcpServers !== "object" || Array.isArray(mcpConfig.mcpServers)) {
+      addError(`${pluginName}: mcp.json must contain an "mcpServers" object.`);
+    }
+  } else {
+    addWarning(`${pluginName}: no mcp.json file found (only needed when using MCP servers).`);
+  }
+}
+
 async function main() {
   const marketplacePath = path.join(repoRoot, ".cursor-plugin", "marketplace.json");
+  const rootManifestPath = path.join(repoRoot, ".cursor-plugin", "plugin.json");
+
+  if (await pathExists(rootManifestPath)) {
+    if (await pathExists(marketplacePath)) {
+      addError("A single-plugin repository must not also contain .cursor-plugin/marketplace.json.");
+    }
+
+    const rootManifest = await readJsonFile(rootManifestPath, "Plugin manifest");
+    if (rootManifest) {
+      const expectedName = typeof rootManifest.name === "string" ? rootManifest.name : "root plugin";
+      await validatePluginDirectory(repoRoot, expectedName, rootManifest);
+    }
+    summarizeAndExit();
+    return;
+  }
+
   const marketplace = await readJsonFile(marketplacePath, "Marketplace manifest");
   if (!marketplace) {
     summarizeAndExit();
@@ -322,37 +392,13 @@ async function main() {
       continue;
     }
 
-    if (typeof pluginManifest.name !== "string" || !pluginNamePattern.test(pluginManifest.name)) {
-      addError(
-        `${entry.name}: "name" in plugin.json must be lowercase and use only alphanumerics, hyphens, and periods.`
-      );
-    }
-
-    if (pluginManifest.name && pluginManifest.name !== entry.name) {
-      addError(
-        `${entry.name}: marketplace entry name does not match plugin.json name ("${pluginManifest.name}").`
-      );
-    }
-
-    const manifestFields = ["logo", "rules", "skills", "agents", "commands", "hooks", "mcpServers"];
-    for (const field of manifestFields) {
-      const values = extractPathValues(pluginManifest[field]);
-      for (const value of values) {
-        await validateReferencedPath(pluginDir, field, value, entry.name);
-      }
-    }
-
-    await validateComponentFrontmatter(pluginDir, entry.name);
+    await validatePluginDirectory(pluginDir, entry.name, pluginManifest);
 
     const hooksPath = path.join(pluginDir, "hooks", "hooks.json");
     if (!(await pathExists(hooksPath))) {
       addWarning(`${entry.name}: no hooks/hooks.json file found (only needed when using hooks).`);
     }
 
-    const mcpPath = path.join(pluginDir, "mcp.json");
-    if (!(await pathExists(mcpPath))) {
-      addWarning(`${entry.name}: no mcp.json file found (only needed when using MCP servers).`);
-    }
   }
 
   summarizeAndExit();
