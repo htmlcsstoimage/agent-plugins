@@ -2,13 +2,13 @@
   "name": "html-css-to-image",
   "displayName": "HTML/CSS to Image API",
   "version": "0.1.0",
-  "description": "Let AI agents capture live website screenshots, render HTML/CSS, and populate reusable templates as images or PDFs—without managing a browser.",
+  "description": "Let AI agents capture live website screenshots, render HTML/CSS, and populate reusable templates as images or PDFs - without managing a browser.",
   "author": {
     "name": "HTML/CSS to Image",
     "email": "support@htmlcsstoimage.com"
   },
   "homepage": "https://docs.htmlcsstoimage.com/integrations/mcp/",
-  "repository": "https://github.com/htmlcsstoimage/cursor-plugin",
+  "repository": "https://github.com/htmlcsstoimage/agent-plugins",
   "license": "MIT",
   "keywords": [
     "image-generation",
