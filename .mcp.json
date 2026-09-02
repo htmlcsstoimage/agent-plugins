@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "hcti": {
+      "type": "http",
+      "url": "https://mcp.hcti.io"
+    }
+  }
+}

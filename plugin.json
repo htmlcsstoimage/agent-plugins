@@ -1,0 +1,23 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "html-css-to-image",
+  "version": "0.1.0",
+  "description": "Generate images, website screenshots, PDFs, and template-based graphics with HTML/CSS to Image.",
+  "author": {
+    "name": "HTML/CSS to Image",
+    "email": "support@htmlcsstoimage.com",
+    "url": "https://htmlcsstoimage.com"
+  },
+  "homepage": "https://docs.htmlcsstoimage.com/integrations/mcp/",
+  "repository": "https://github.com/htmlcsstoimage/agent-plugins",
+  "license": "MIT",
+  "keywords": [
+    "hcti",
+    "mcp",
+    "image-generation",
+    "screenshots",
+    "html",
+    "css",
+    "pdf"
+  ]
+}

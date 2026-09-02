@@ -39,6 +39,6 @@ Treat URL capture as a request to send the target page to HCTI's remote renderer
 - Do not claim success until the tool returns a successful result.
 - Return the generated asset URL and briefly identify the format or variation when useful.
 - When the active channel supports media presentation, present the generated asset as media as well as preserving its URL.
-- For an authorization failure, ask the user to open Cursor Settings, find the `hcti` MCP server, select **Connect**, and complete browser authorization before retrying.
+- For an authorization failure, ask the user to connect the `hcti` MCP server in their client and complete browser authorization before retrying.
 - For an account-limit or credit error, report the service's message without repeatedly retrying.
 - For invalid HTML, CSS, selectors, or inaccessible URLs, explain the failing input and make a corrected call only when the correction is clear or the user approves it.
