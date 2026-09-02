@@ -1,4 +1,4 @@
-# HTML/CSS to Image agent plugins
+# HTML/CSS to Image API for AI agents
 
 Let AI agents capture live website screenshots, render HTML/CSS, and populate reusable templates as images or PDFs—without managing a browser.
 

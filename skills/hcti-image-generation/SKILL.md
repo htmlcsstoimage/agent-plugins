@@ -1,6 +1,6 @@
 ---
 name: hcti-image-generation
-description: Capture live website screenshots, render HTML/CSS, and populate reusable templates as images or PDFs through HCTI MCP tools—without managing a browser. Use for screenshots, social cards, Open Graph images, and other browser-rendered graphics. Do not use for editing or interpreting an existing image.
+description: Let AI agents capture live website screenshots, render HTML/CSS, and populate reusable templates as images or PDFs—without managing a browser. Use the HCTI MCP tools for screenshots, social cards, Open Graph images, and other browser-rendered graphics. Do not use for editing or interpreting an existing image.
 ---
 
 # HTML/CSS to Image API
