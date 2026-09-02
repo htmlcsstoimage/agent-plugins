@@ -10,11 +10,33 @@ This repository is a portable [Agent Plugin](https://agent-plugins.org/) package
 | --- | --- |
 | `plugin.json` | Portable Agent Plugins manifest. |
 | `mcp.json` | Portable MCP configuration. |
-| `.mcp.json` | Claude Code and Grok-compatible MCP configuration. |
+| `.mcp.json` | Claude Code, GitHub Copilot, and Grok-compatible MCP configuration. |
 | `.claude-plugin/plugin.json` | Claude Code plugin manifest. |
 | `.cursor-plugin/plugin.json` | Cursor Marketplace manifest. |
 | `.grok-plugin/plugin.json` | Grok Build marketplace manifest. |
 | `skills/hcti-image-generation/` | Shared HCTI workflow and safety guidance. |
+
+## GitHub Copilot
+
+### Install from Awesome Copilot
+
+After the plugin is approved for the Awesome Copilot marketplace, install it from Copilot CLI:
+
+```bash
+copilot plugin install html-css-to-image@awesome-copilot
+```
+
+Start Copilot CLI, open `/mcp`, connect `hcti`, and complete authorization in your browser. The HCTI skill then gives Copilot guidance for choosing the right rendering workflow and handling generated files safely.
+
+### Test a local checkout
+
+Install this repository directly:
+
+```bash
+copilot plugin install /path/to/agent-plugins
+```
+
+Start Copilot CLI and use `/plugin list`, `/skills list`, and `/mcp` to confirm that the plugin, skill, and HCTI server are available.
 
 ## Claude Code
 
@@ -120,6 +142,7 @@ The Grok adapter is validated by the xAI marketplace's catalog and component-ind
 ## Documentation and support
 
 - [HTML/CSS to Image MCP documentation](https://docs.htmlcsstoimage.com/integrations/mcp/)
+- [GitHub Copilot plugin documentation](https://docs.github.com/en/copilot/concepts/agents/about-plugins)
 - [Cursor plugin documentation](https://cursor.com/docs/plugins)
 - [Cursor plugin reference](https://cursor.com/docs/reference/plugins)
 - [Claude Code plugin documentation](https://code.claude.com/docs/en/plugins)
