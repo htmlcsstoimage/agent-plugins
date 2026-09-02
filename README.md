@@ -93,6 +93,10 @@ After the marketplace entry is available, install **HTML/CSS to Image** in Grok 
 
 Requests sent through the plugin are processed by the hosted HTML/CSS to Image service. HTML, CSS, template values, target public URLs, and rendering options supplied to HCTI are sent to that service to produce the requested output. Do not send cookies, authorization headers, private URLs, or other secrets for webpage capture.
 
+## License and service terms
+
+The plugin files in this repository are available under the [MIT License](LICENSE). The license applies to this repository's source code, configuration, and documentation; it does not license the hosted HTML/CSS to Image service. Use of the service is governed separately by the [Terms of Use](https://htmlcsstoimage.com/terms) and [Privacy Policy](https://htmlcsstoimage.com/privacy).
+
 ## Validate
 
 Run the repository checks:
