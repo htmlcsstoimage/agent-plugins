@@ -301,6 +301,62 @@ async function validatePluginDirectory(pluginDir, expectedName, pluginManifest) 
   }
 }
 
+async function validateClaudeAdapter(expectedName) {
+  const manifestPath = path.join(repoRoot, ".claude-plugin", "plugin.json");
+  const manifest = await readJsonFile(manifestPath, "Claude plugin manifest");
+  if (!manifest) {
+    return;
+  }
+
+  if (manifest.$schema !== "https://json.schemastore.org/claude-code-plugin-manifest.json") {
+    addError("Claude plugin manifest must use the Claude Code plugin manifest schema.");
+  }
+
+  if (typeof manifest.name !== "string" || !pluginNamePattern.test(manifest.name)) {
+    addError("Claude plugin name must be lowercase kebab-case.");
+  } else if (manifest.name !== expectedName) {
+    addError(`Claude plugin name "${manifest.name}" does not match "${expectedName}".`);
+  }
+
+  for (const field of ["displayName", "version", "description", "license"]) {
+    if (typeof manifest[field] !== "string" || manifest[field].trim().length === 0) {
+      addError(`Claude plugin: "${field}" is required.`);
+    }
+  }
+
+  if (!manifest.author || typeof manifest.author.name !== "string" || manifest.author.name.length === 0) {
+    addError('Claude plugin: "author.name" is required.');
+  }
+
+  if (!Array.isArray(manifest.keywords) || manifest.keywords.length === 0) {
+    addError('Claude plugin: "keywords" must be a non-empty array.');
+  }
+
+  for (const field of ["skills", "commands", "agents", "hooks", "mcpServers", "outputStyles", "lspServers"]) {
+    for (const value of extractPathValues(manifest[field])) {
+      if (!value.startsWith("./")) {
+        addError(`Claude plugin field "${field}" must use a path beginning with "./": "${value}".`);
+      }
+      await validateReferencedPath(repoRoot, field, value, "Claude plugin");
+    }
+  }
+
+  const mcpConfig = await readJsonFile(path.join(repoRoot, ".mcp.json"), "Claude MCP configuration");
+  if (!mcpConfig?.mcpServers || typeof mcpConfig.mcpServers !== "object" || Array.isArray(mcpConfig.mcpServers)) {
+    addError('Claude .mcp.json must contain an "mcpServers" object.');
+    return;
+  }
+
+  for (const [serverName, server] of Object.entries(mcpConfig.mcpServers)) {
+    if (!server || typeof server !== "object" || !["http", "streamable-http"].includes(server.type)) {
+      addError(`Claude MCP server "${serverName}" must declare type "http" or "streamable-http".`);
+    }
+    if (typeof server?.url !== "string" || !server.url.startsWith("https://")) {
+      addError(`Claude MCP server "${serverName}" must use an HTTPS URL.`);
+    }
+  }
+}
+
 async function main() {
   const marketplacePath = path.join(repoRoot, ".cursor-plugin", "marketplace.json");
   const rootManifestPath = path.join(repoRoot, ".cursor-plugin", "plugin.json");
@@ -314,6 +370,7 @@ async function main() {
     if (rootManifest) {
       const expectedName = typeof rootManifest.name === "string" ? rootManifest.name : "root plugin";
       await validatePluginDirectory(repoRoot, expectedName, rootManifest);
+      await validateClaudeAdapter(expectedName);
     }
     summarizeAndExit();
     return;

@@ -10,10 +10,36 @@ This repository is a portable [Agent Plugin](https://agent-plugins.org/) package
 | --- | --- |
 | `plugin.json` | Portable Agent Plugins manifest. |
 | `mcp.json` | Portable MCP configuration. |
-| `.mcp.json` | Grok-compatible MCP configuration. |
+| `.mcp.json` | Claude Code and Grok-compatible MCP configuration. |
+| `.claude-plugin/plugin.json` | Claude Code plugin manifest. |
 | `.cursor-plugin/plugin.json` | Cursor Marketplace manifest. |
 | `.grok-plugin/plugin.json` | Grok Build marketplace manifest. |
 | `skills/hcti-image-generation/` | Shared HCTI workflow and safety guidance. |
+
+## Claude Code
+
+### Install from the Claude community marketplace
+
+After the plugin is published, add Anthropic's community marketplace and install the plugin:
+
+```text
+/plugin marketplace add anthropics/claude-plugins-community
+/plugin install html-css-to-image@claude-community
+/reload-plugins
+```
+
+Run `/mcp`, select `hcti`, and complete authorization in your browser. Claude can invoke the HCTI skill automatically when relevant; it is also available as `/html-css-to-image:hcti-image-generation`.
+
+### Test a local checkout
+
+Validate and load this repository directly:
+
+```bash
+claude plugin validate . --strict
+claude --plugin-dir .
+```
+
+In the test session, run `/mcp` to connect `hcti`, then try an image request. Use `/reload-plugins` after changing the manifest, skill, or MCP configuration.
 
 ## Cursor
 
@@ -69,11 +95,21 @@ Requests sent through the plugin are processed by the hosted HTML/CSS to Image s
 
 ## Validate
 
-Validate the Cursor adapter from this repository:
+Run the repository checks:
 
 ```bash
 node scripts/validate-template.mjs
 ```
+
+Validate the Claude adapter with Claude Code's official strict validator:
+
+```bash
+claude plugin validate . --strict
+```
+
+### Verified compatibility
+
+Tested with Claude Code 2.1.258. The strict plugin validator passes, Claude discovers the shared HCTI skill and MCP server, and the browser-based OAuth flow connects successfully.
 
 The Grok adapter is validated by the xAI marketplace's catalog and component-index checks against the pinned commit.
 
@@ -82,4 +118,6 @@ The Grok adapter is validated by the xAI marketplace's catalog and component-ind
 - [HTML/CSS to Image MCP documentation](https://docs.htmlcsstoimage.com/integrations/mcp/)
 - [Cursor plugin documentation](https://cursor.com/docs/plugins)
 - [Cursor plugin reference](https://cursor.com/docs/reference/plugins)
+- [Claude Code plugin documentation](https://code.claude.com/docs/en/plugins)
+- [Claude Code plugin reference](https://code.claude.com/docs/en/plugins-reference)
 - Support: [support@htmlcsstoimage.com](mailto:support@htmlcsstoimage.com)
