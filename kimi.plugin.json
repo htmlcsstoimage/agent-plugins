@@ -1,0 +1,34 @@
+{
+  "name": "html-css-to-image",
+  "version": "0.1.0",
+  "description": "Let AI agents capture live website screenshots, render HTML/CSS, and populate reusable templates as images or PDFs - without managing a browser.",
+  "keywords": [
+    "hcti",
+    "mcp",
+    "image-generation",
+    "screenshots",
+    "html",
+    "css",
+    "pdf"
+  ],
+  "author": {
+    "name": "HTML/CSS to Image",
+    "email": "support@htmlcsstoimage.com",
+    "url": "https://htmlcsstoimage.com"
+  },
+  "homepage": "https://docs.htmlcsstoimage.com/integrations/mcp/",
+  "license": "MIT",
+  "skills": "./skills/",
+  "mcpServers": {
+    "hcti": {
+      "url": "https://mcp.hcti.io"
+    }
+  },
+  "interface": {
+    "displayName": "HTML/CSS to Image API",
+    "shortDescription": "Turn websites and HTML/CSS into images or PDFs",
+    "longDescription": "The HTML/CSS to Image MCP server lets AI assistants create production-ready images, website screenshots, and PDFs through natural-language instructions.\n\nUse it to:\n\n- Render HTML and CSS into PNG, JPG, WebP, or PDF\n- Capture screenshots of public URLs\n- Generate images from reusable templates and variables\n- Create batches of multiple image variations\n- Create, update, list, and version image templates\n- Configure viewport size, device scale, selectors, render delays, and other rendering options",
+    "developerName": "HTML/CSS to Image",
+    "websiteURL": "https://htmlcsstoimage.com/"
+  }
+}

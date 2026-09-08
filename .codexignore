@@ -1,0 +1,16 @@
+# Source-control metadata
+.git/
+
+# Local settings and secrets
+.claude/settings.local.json
+.env
+.env.*
+
+# OS, editor, and temporary files
+.DS_Store
+**/.DS_Store
+*.swp
+*.swo
+*.log
+tmp/
+temp/

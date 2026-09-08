@@ -1,0 +1,43 @@
+{
+  "name": "html-css-to-image",
+  "version": "0.1.0",
+  "description": "Let AI agents capture live website screenshots, render HTML/CSS, and populate reusable templates as images or PDFs—without managing a browser.",
+  "author": {
+    "name": "HTML/CSS to Image",
+    "email": "support@htmlcsstoimage.com",
+    "url": "https://htmlcsstoimage.com"
+  },
+  "homepage": "https://docs.htmlcsstoimage.com/integrations/mcp/",
+  "repository": "https://github.com/htmlcsstoimage/agent-plugins",
+  "license": "MIT",
+  "keywords": [
+    "hcti",
+    "mcp",
+    "image-generation",
+    "screenshots",
+    "html",
+    "css",
+    "pdf"
+  ],
+  "skills": "./skills/",
+  "apps": "./.app.json",
+  "interface": {
+    "displayName": "HTML/CSS to Image",
+    "shortDescription": "Turn websites and HTML/CSS into images or PDFs",
+    "longDescription": "The HTML/CSS to Image MCP server lets AI assistants create production-ready images, website screenshots, and PDFs through natural-language instructions.\n\nUse it to:\n\n- Render HTML and CSS into PNG, JPG, WebP, or PDF\n- Capture screenshots of public URLs\n- Generate images from reusable templates and variables\n- Create batches of multiple image variations\n- Create, update, list, and version image templates\n- Configure viewport size, device scale, selectors, render delays, and other rendering options",
+    "developerName": "HTML/CSS to Image",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "https://htmlcsstoimage.com/",
+    "privacyPolicyURL": "https://htmlcsstoimage.com/privacy",
+    "termsOfServiceURL": "https://htmlcsstoimage.com/terms",
+    "defaultPrompt": [
+      "Create a 1200×630 Open Graph image from this title and brand style.",
+      "Capture the pricing table on this public webpage.",
+      "List my HCTI templates and render one with these values."
+    ],
+    "brandColor": "#000000",
+    "composerIcon": "./assets/logo.png",
+    "logo": "./assets/logo.png"
+  }
+}

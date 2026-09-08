@@ -11,24 +11,36 @@ This repository is a portable [Agent Plugin](https://agent-plugins.org/) package
 | `plugin.json` | Portable Agent Plugins manifest. |
 | `mcp.json` | Portable MCP configuration. |
 | `.mcp.json` | Claude Code, GitHub Copilot, and Grok-compatible MCP configuration. |
+| `.codex-plugin/plugin.json` | Native ChatGPT and Codex plugin manifest. |
+| `.app.json` | Maps the package to the official published OpenAI plugin. |
 | `.claude-plugin/plugin.json` | Claude Code plugin manifest. |
 | `.cursor-plugin/plugin.json` | Cursor Marketplace manifest. |
 | `.grok-plugin/plugin.json` | Grok Build marketplace manifest. |
+| `kimi.plugin.json` | Kimi Code plugin manifest. |
 | `skills/hcti-image-generation/` | Shared HCTI workflow and safety guidance. |
+
+## ChatGPT and Codex
+
+Install the official [HTML/CSS to Image plugin](https://chatgpt.com/plugins/plugin_asdk_app_6a4d168031448191abcd6540497efb7b) from the Plugins Directory in ChatGPT or Codex. This is the preferred OpenAI integration and uses HCTI's registered MCP connection with browser-based OAuth.
+
+The native `.codex-plugin/plugin.json` manifest packages the shared HCTI skill, while `.app.json` maps the package to the published OpenAI plugin.
+
+## Kimi Code
+
+Install the plugin directly from GitHub in Kimi Code:
+
+```text
+/plugins install https://github.com/htmlcsstoimage/agent-plugins
+/reload
+```
+
+Run `/mcp-config login hcti` and complete authorization in your browser. Then use `/mcp` to confirm that the HCTI tools are connected.
+
+To test a local checkout, use `/plugins install /path/to/agent-plugins`. Kimi copies installed plugins into its managed plugin directory, so reinstall after changing the local source.
 
 ## GitHub Copilot
 
-### Install from Awesome Copilot
-
-After the plugin is approved for the Awesome Copilot marketplace, install it from Copilot CLI:
-
-```bash
-copilot plugin install html-css-to-image@awesome-copilot
-```
-
-Start Copilot CLI, open `/mcp`, connect `hcti`, and complete authorization in your browser. The HCTI skill then gives Copilot guidance for choosing the right rendering workflow and handling generated files safely.
-
-### Test a local checkout
+### Install a local checkout
 
 Install this repository directly:
 
@@ -36,7 +48,7 @@ Install this repository directly:
 copilot plugin install /path/to/agent-plugins
 ```
 
-Start Copilot CLI and use `/plugin list`, `/skills list`, and `/mcp` to confirm that the plugin, skill, and HCTI server are available.
+Start Copilot CLI and use `/plugin list`, `/skills list`, and `/mcp` to confirm that the plugin, skill, and HCTI server are available. Connect `hcti` from `/mcp` and complete authorization in your browser.
 
 ## Claude Code
 
@@ -142,6 +154,9 @@ The Grok adapter is validated by the xAI marketplace's catalog and component-ind
 ## Documentation and support
 
 - [HTML/CSS to Image MCP documentation](https://docs.htmlcsstoimage.com/integrations/mcp/)
+- [Official ChatGPT and Codex plugin](https://chatgpt.com/plugins/plugin_asdk_app_6a4d168031448191abcd6540497efb7b)
+- [OpenAI plugin packaging documentation](https://developers.openai.com/codex/plugins/build)
+- [Kimi Code plugin documentation](https://github.com/MoonshotAI/kimi-code/blob/main/docs/en/customization/plugins.md)
 - [GitHub Copilot plugin documentation](https://docs.github.com/en/copilot/concepts/agents/about-plugins)
 - [Cursor plugin documentation](https://cursor.com/docs/plugins)
 - [Cursor plugin reference](https://cursor.com/docs/reference/plugins)

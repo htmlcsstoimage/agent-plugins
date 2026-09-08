@@ -9,6 +9,7 @@ const errors = [];
 const warnings = [];
 
 const pluginNamePattern = /^[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$/;
+const kimiPluginNamePattern = /^[a-z0-9][a-z0-9_-]{0,63}$/;
 const marketplaceNamePattern = /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
 
 function addError(message) {
@@ -357,6 +358,74 @@ async function validateClaudeAdapter(expectedName) {
   }
 }
 
+async function validateKimiAdapter(expectedName, expectedVersion) {
+  const manifestPath = path.join(repoRoot, "kimi.plugin.json");
+  const manifest = await readJsonFile(manifestPath, "Kimi Code plugin manifest");
+  if (!manifest) {
+    return;
+  }
+
+  if (typeof manifest.name !== "string" || !kimiPluginNamePattern.test(manifest.name)) {
+    addError("Kimi Code plugin name must match [a-z0-9][a-z0-9_-]{0,63}.");
+  } else if (manifest.name !== expectedName) {
+    addError(`Kimi Code plugin name "${manifest.name}" does not match "${expectedName}".`);
+  }
+
+  for (const field of ["version", "description", "homepage", "license"]) {
+    if (typeof manifest[field] !== "string" || manifest[field].trim().length === 0) {
+      addError(`Kimi Code plugin: "${field}" is required.`);
+    }
+  }
+
+  if (manifest.version !== expectedVersion) {
+    addError(
+      `Kimi Code plugin version "${manifest.version}" does not match adapter version "${expectedVersion}".`
+    );
+  }
+
+  if (!manifest.author || typeof manifest.author.name !== "string" || manifest.author.name.length === 0) {
+    addError('Kimi Code plugin: "author.name" is required.');
+  }
+
+  if (!Array.isArray(manifest.keywords) || manifest.keywords.length === 0) {
+    addError('Kimi Code plugin: "keywords" must be a non-empty array.');
+  }
+
+  for (const value of extractPathValues(manifest.skills)) {
+    if (!value.startsWith("./")) {
+      addError(`Kimi Code plugin field "skills" must use a path beginning with "./": "${value}".`);
+    }
+    await validateReferencedPath(repoRoot, "skills", value, "Kimi Code plugin");
+  }
+
+  if (!manifest.mcpServers || typeof manifest.mcpServers !== "object" || Array.isArray(manifest.mcpServers)) {
+    addError('Kimi Code plugin must contain an "mcpServers" object.');
+  } else {
+    const hctiServer = manifest.mcpServers.hcti;
+    if (!hctiServer || typeof hctiServer !== "object" || Array.isArray(hctiServer)) {
+      addError('Kimi Code plugin must declare the "hcti" MCP server.');
+    } else if (typeof hctiServer.url !== "string" || !hctiServer.url.startsWith("https://")) {
+      addError('Kimi Code MCP server "hcti" must use an HTTPS URL.');
+    }
+  }
+
+  if (!manifest.interface || typeof manifest.interface !== "object" || Array.isArray(manifest.interface)) {
+    addError('Kimi Code plugin must contain an "interface" object.');
+  } else {
+    for (const field of ["displayName", "shortDescription", "longDescription", "developerName", "websiteURL"]) {
+      if (typeof manifest.interface[field] !== "string" || manifest.interface[field].trim().length === 0) {
+        addError(`Kimi Code plugin interface: "${field}" is required.`);
+      }
+    }
+    if (
+      typeof manifest.interface.websiteURL === "string" &&
+      !manifest.interface.websiteURL.startsWith("https://")
+    ) {
+      addError('Kimi Code plugin interface "websiteURL" must use HTTPS.');
+    }
+  }
+}
+
 async function main() {
   const marketplacePath = path.join(repoRoot, ".cursor-plugin", "marketplace.json");
   const rootManifestPath = path.join(repoRoot, ".cursor-plugin", "plugin.json");
@@ -371,6 +440,7 @@ async function main() {
       const expectedName = typeof rootManifest.name === "string" ? rootManifest.name : "root plugin";
       await validatePluginDirectory(repoRoot, expectedName, rootManifest);
       await validateClaudeAdapter(expectedName);
+      await validateKimiAdapter(expectedName, rootManifest.version);
     }
     summarizeAndExit();
     return;
