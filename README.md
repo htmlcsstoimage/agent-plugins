@@ -151,6 +151,12 @@ Tested with Claude Code 2.1.258. The strict plugin validator passes, Claude disc
 
 The Grok adapter is validated by the xAI marketplace's catalog and component-index checks against the pinned commit.
 
+## HOL Registry
+
+Our AI agent plugins are registered in the [HOL Plugin Registry](https://hol.org/registry/plugins/html-css-to-image%2Fhtml-css-to-image), where you can review installation details, security findings, provenance, and the current trust score.
+
+[![HTML/CSS to Image API trust badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fhol.org%2Fapi%2Fregistry%2Fbadges%2Fplugin%3Fslug%3Dhtml-css-to-image%252Fhtml-css-to-image%26metric%3Dtrust%26style%3Dflat)](https://hol.org/registry/plugins/html-css-to-image%2Fhtml-css-to-image)
+
 ## Documentation and support
 
 - [HTML/CSS to Image MCP documentation](https://docs.htmlcsstoimage.com/integrations/mcp/)
