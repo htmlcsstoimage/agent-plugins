@@ -17,7 +17,8 @@ This repository is a portable [Agent Plugin](https://agent-plugins.org/) package
 | `.cursor-plugin/plugin.json` | Cursor Marketplace manifest. |
 | `.grok-plugin/plugin.json` | Grok Build marketplace manifest. |
 | `kimi.plugin.json` | Kimi Code plugin manifest. |
-| `skills/hcti-image-generation/` | Shared HCTI workflow and safety guidance. |
+| `skills/hcti-image-generation/` | Image generation and template workflow guidance. |
+| `skills/hcti-open-graph-images/` | Dynamic Open Graph image configuration guidance. |
 
 ## ChatGPT and Codex
 
@@ -104,6 +105,8 @@ After the marketplace entry is available, install **HTML/CSS to Image** in Grok 
 
 ## Included capabilities
 
+The core rendering and template tools are:
+
 | Tool | Purpose |
 | --- | --- |
 | `create_image` | Render HTML and CSS as an image or PDF. |
@@ -116,16 +119,32 @@ After the marketplace entry is available, install **HTML/CSS to Image** in Grok 
 | `list_templates` | List templates in the authorized account. |
 | `list_template_versions` | Inspect a template's version history. |
 
+## Managing resources with MCP
+
+Beyond generating images, the HCTI MCP server can manage supporting resources in the connected organization:
+
+| Resource | Tools | Purpose |
+| --- | --- | --- |
+| Usage | `check_usage` | Check the organization's current image usage and limits. |
+| Open Graph configurations | `create_og_config`, `update_og_config`, `get_og_config`, `list_og_configs`, `delete_og_config` | Manage dynamic social-preview images for pages on a website. |
+| Proxies | `create_proxy`, `update_proxy`, `get_proxy`, `list_proxies`, `delete_proxy` | Manage proxies used when HCTI accesses source websites. |
+| Storage destinations | `create_storage_destination`, `update_storage_destination`, `get_storage_destination`, `list_storage_destinations`, `delete_storage_destination`, `get_aws_storage_external_id` | Manage external destinations for generated images and retrieve the external ID needed for AWS setup. |
+
+[Dynamic Open Graph image configurations](https://htmlcsstoimage.com/features/og-images) are an especially useful integration point. An agent can resolve an existing HCTI template, map page metadata into its variables, optionally select a configured proxy or storage destination, and create a persistent configuration for serving cached social images.
+
+Resource tools operate on the HCTI organization selected during OAuth authorization, and available tools depend on the permissions granted to that connection. Listing and retrieval are read-only; create, update, and delete operations change the account. In particular, `update_og_config` replaces the complete configuration, so agents should retrieve the current configuration and preserve unchanged settings before updating it.
+
 ## Example requests
 
 - "Create a 1200×630 Open Graph image with this title and color palette."
 - "Capture the pricing table on `https://example.com/pricing`."
 - "List my HCTI templates and render the social-card template with this headline."
 - "Create five product-card variations with different accent colors."
+- "Create a dynamic Open Graph configuration for `https://example.com` using my social-card template and map its title and description from page metadata."
 
 ## Data handling
 
-Requests sent through the plugin are processed by the hosted HTML/CSS to Image service. HTML, CSS, template values, target public URLs, and rendering options supplied to HCTI are sent to that service to produce the requested output. Do not send cookies, authorization headers, private URLs, or other secrets for webpage capture.
+Requests sent through the plugin are processed by the hosted HTML/CSS to Image service. HTML, CSS, template values, target URLs, rendering options, and resource configuration supplied to HCTI are sent to that service; persistent resources are stored in the connected HCTI organization. Do not provide cookies, authorization headers, private URLs, or other secrets unless intentionally configuring an authorized rendering workflow and you understand that HCTI will process that data.
 
 ## License and service terms
 

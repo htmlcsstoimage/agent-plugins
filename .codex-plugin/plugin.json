@@ -1,6 +1,6 @@
 {
   "name": "html-css-to-image",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Let AI agents capture live website screenshots, render HTML/CSS, and populate reusable templates as images or PDFs—without managing a browser.",
   "author": {
     "name": "HTML/CSS to Image",
@@ -24,7 +24,7 @@
   "interface": {
     "displayName": "HTML/CSS to Image",
     "shortDescription": "Turn websites and HTML/CSS into images or PDFs",
-    "longDescription": "The HTML/CSS to Image MCP server lets AI assistants create production-ready images, website screenshots, and PDFs through natural-language instructions.\n\nUse it to:\n\n- Render HTML and CSS into PNG, JPG, WebP, or PDF\n- Capture screenshots of public URLs\n- Generate images from reusable templates and variables\n- Create batches of multiple image variations\n- Create, update, list, and version image templates\n- Configure viewport size, device scale, selectors, render delays, and other rendering options",
+    "longDescription": "Turn a simple request into polished images, website screenshots, and PDFs—without leaving ChatGPT. HTML/CSS to Image combines flexible browser-based rendering with natural-language control, helping developers, marketers, and content teams create consistent visual assets faster.\n\nUse it to:\n\n- Create social graphics, product images, reports, certificates, and other branded assets from HTML and CSS\n- Capture website screenshots for previews, documentation, testing, and visual QA\n- Produce personalized images at scale with reusable, versioned templates and dynamic variables\n- Generate batches across responsive dimensions, time zones, color schemes, and other variations in one workflow\n- Export to PNG, JPG, WebP, or PDF with precise control over viewport size, device scale, selectors, render delays, and more\n- Keep your rendering pipeline under your control with organization-level resources:\n  - Deliver rendered files directly to your own Amazon S3 or S3-compatible storage\n  - Route renders through HTTP or HTTPS proxies you configure\n  - Automate dynamic Open Graph images using one stable image URL pattern, with page metadata driving up-to-date social previews—even for static sites",
     "developerName": "HTML/CSS to Image",
     "category": "Developer Tools",
     "capabilities": ["Read", "Write"],

@@ -1,6 +1,6 @@
 {
   "name": "html-css-to-image",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Let AI agents capture live website screenshots, render HTML/CSS, and populate reusable templates as images or PDFs - without managing a browser.",
   "author": {
     "name": "HTML/CSS to Image",
