@@ -11,6 +11,7 @@ This repository is a portable [Agent Plugin](https://agent-plugins.org/) package
 | `plugin.json` | Portable Agent Plugins manifest. |
 | `mcp.json` | Portable MCP configuration. |
 | `.mcp.json` | Claude Code, GitHub Copilot, and Grok-compatible MCP configuration. |
+| `llms-install.md` | Agent-readable installation guidance for Cline and other MCP clients. |
 | `.codex-plugin/plugin.json` | Native ChatGPT and Codex plugin manifest. |
 | `.app.json` | Maps the package to the official published OpenAI plugin. |
 | `.claude-plugin/plugin.json` | Claude Code plugin manifest. |
@@ -50,6 +51,10 @@ copilot plugin install /path/to/agent-plugins
 ```
 
 Start Copilot CLI and use `/plugin list`, `/skills list`, and `/mcp` to confirm that the plugin, skill, and HCTI server are available. Connect `hcti` from `/mcp` and complete authorization in your browser.
+
+## Cline
+
+Give Cline the repository's [`llms-install.md`](llms-install.md) to configure the hosted HCTI server, or add it manually as a remote **Streamable HTTP** server at `https://mcp.hcti.io`. Complete the OAuth authorization in your browser; no API key or local server installation is required.
 
 ## Claude Code
 
@@ -183,6 +188,7 @@ Our AI agent plugins are registered in the [HOL Plugin Registry](https://hol.org
 - [OpenAI plugin packaging documentation](https://developers.openai.com/codex/plugins/build)
 - [Kimi Code plugin documentation](https://github.com/MoonshotAI/kimi-code/blob/main/docs/en/customization/plugins.md)
 - [GitHub Copilot plugin documentation](https://docs.github.com/en/copilot/concepts/agents/about-plugins)
+- [Cline MCP installation instructions](llms-install.md)
 - [Cursor plugin documentation](https://cursor.com/docs/plugins)
 - [Cursor plugin reference](https://cursor.com/docs/reference/plugins)
 - [Claude Code plugin documentation](https://code.claude.com/docs/en/plugins)
