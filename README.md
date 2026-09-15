@@ -17,6 +17,7 @@ This repository is a portable [Agent Plugin](https://agent-plugins.org/) package
 | `.claude-plugin/plugin.json` | Claude Code plugin manifest. |
 | `.cursor-plugin/plugin.json` | Cursor Marketplace manifest. |
 | `.grok-plugin/plugin.json` | Grok Build marketplace manifest. |
+| `gemini-extension.json` | Gemini CLI extension manifest. |
 | `kimi.plugin.json` | Kimi Code plugin manifest. |
 | `skills/hcti-image-generation/` | Image generation and template workflow guidance. |
 | `skills/hcti-open-graph-images/` | Dynamic Open Graph image configuration guidance. |
@@ -39,6 +40,18 @@ Install the plugin directly from GitHub in Kimi Code:
 Run `/mcp-config login hcti` and complete authorization in your browser. Then use `/mcp` to confirm that the HCTI tools are connected.
 
 To test a local checkout, use `/plugins install /path/to/agent-plugins`. Kimi copies installed plugins into its managed plugin directory, so reinstall after changing the local source.
+
+## Gemini CLI
+
+Install the extension directly from GitHub:
+
+```bash
+gemini extensions install https://github.com/htmlcsstoimage/agent-plugins
+```
+
+Restart Gemini CLI, run `/extensions list` to confirm the extension is enabled, then run `/mcp auth hcti` and complete authorization in your browser. Use `/mcp list` to confirm the HCTI tools are connected. Gemini CLI automatically discovers the included HCTI Agent Skills.
+
+To test a local checkout during development, run `gemini extensions link /path/to/agent-plugins`, restart Gemini CLI, and inspect it with `/extensions list`.
 
 ## GitHub Copilot
 
@@ -187,6 +200,7 @@ Our AI agent plugins are registered in the [HOL Plugin Registry](https://hol.org
 - [Official ChatGPT and Codex plugin](https://chatgpt.com/plugins/plugin_asdk_app_6a4d168031448191abcd6540497efb7b)
 - [OpenAI plugin packaging documentation](https://developers.openai.com/codex/plugins/build)
 - [Kimi Code plugin documentation](https://github.com/MoonshotAI/kimi-code/blob/main/docs/en/customization/plugins.md)
+- [Gemini CLI extension documentation](https://geminicli.com/docs/extensions/)
 - [GitHub Copilot plugin documentation](https://docs.github.com/en/copilot/concepts/agents/about-plugins)
 - [Cline MCP installation instructions](llms-install.md)
 - [Cursor plugin documentation](https://cursor.com/docs/plugins)

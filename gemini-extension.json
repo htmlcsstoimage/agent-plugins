@@ -1,0 +1,12 @@
+{
+  "name": "html-css-to-image",
+  "version": "0.2.0",
+  "description": "Create images, website screenshots, and PDFs from HTML/CSS, URLs, or reusable templates.",
+  "mcpServers": {
+    "hcti": {
+      "type": "http",
+      "url": "https://mcp.hcti.io",
+      "description": "Hosted HTML/CSS to Image MCP server with browser-based OAuth."
+    }
+  }
+}
