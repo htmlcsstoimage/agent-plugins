@@ -21,6 +21,8 @@ This repository is a portable [Agent Plugin](https://agent-plugins.org/) package
 | `kimi.plugin.json` | Kimi Code plugin manifest. |
 | `skills/hcti-image-generation/` | Image generation and template workflow guidance. |
 | `skills/hcti-open-graph-images/` | Dynamic Open Graph image configuration guidance. |
+| `clawhub/html-css-to-image/` | Standalone OAuth/MCP rendering skill for ClawHub. |
+| `clawhub/hcti-open-graph-images/` | Standalone OAuth/MCP Open Graph skill for ClawHub. |
 
 ## ChatGPT and Codex
 
@@ -120,6 +122,41 @@ For another test cycle, replace the copied `html-css-to-image` directory with th
 The xAI plugin marketplace points to this repository at a pinned commit. Its Grok manifest reuses the root skill, MCP endpoint, and assets.
 
 After the marketplace entry is available, install **HTML/CSS to Image** in Grok Build, connect the `hcti` MCP server when prompted, and complete authorization in your browser.
+
+## ClawHub / OpenClaw
+
+The [ClawHub skill](clawhub/html-css-to-image/SKILL.md) supports HTML/CSS rendering, website screenshots, PDF output, and saved-template rendering through the hosted MCP server. Users connect to `https://mcp.hcti.io` using browser-based OAuth; no API keys are required. Rendering requires an HCTI account and available credits.
+
+The separate [Open Graph skill](clawhub/hcti-open-graph-images/SKILL.md) creates persistent dynamic social-preview configurations and integrates their image URLs into website metadata. It includes the webpage integration reference and uses the same OAuth connection.
+
+These standalone distributions live outside `skills/` so other clients do not discover duplicate skills. Their setup instructions register the server in OpenClaw and complete OAuth; installing a skill alone does not establish the connection. Publish only the skill folder, not the whole plugin repository.
+
+From this repository's root, with the current ClawHub CLI installed:
+
+```bash
+clawhub login
+clawhub skill publish ./clawhub/html-css-to-image \
+  --slug html-css-to-image \
+  --name "HTML/CSS to Image" \
+  --categories integrations,creative \
+  --topics "screenshots,html,css,pdf,images" \
+  --dry-run
+```
+
+Preview the Open Graph skill separately:
+
+```bash
+clawhub skill publish ./clawhub/hcti-open-graph-images \
+  --slug hcti-open-graph-images \
+  --name "HTML/CSS to Image — Dynamic Open Graph Images" \
+  --categories integrations,development \
+  --topics "open-graph,social-previews,seo,images,html" \
+  --dry-run
+```
+
+After reviewing each preview, run its publish command without `--dry-run`. To publish under an organization, add `--owner <your-clawhub-owner-handle>` to both commands; otherwise the authenticated user owns the listing. Publication is separate from committing this repository, and new releases may wait for automated review.
+
+ClawHub distributes published skills under MIT-0. Review those terms before the first publication; the hosted HCTI service remains subject to its own terms. See [ClawHub publishing](https://docs.openclaw.ai/clawhub/publishing) and [skill format](https://docs.openclaw.ai/clawhub/skill-format).
 
 ## Included capabilities
 
