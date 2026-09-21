@@ -11,14 +11,18 @@ This repository is a portable [Agent Plugin](https://agent-plugins.org/) package
 | `plugin.json` | Portable Agent Plugins manifest. |
 | `mcp.json` | Portable MCP configuration. |
 | `.mcp.json` | Claude Code, GitHub Copilot, and Grok-compatible MCP configuration. |
+| `llms-install.md` | Agent-readable installation guidance for Cline and other MCP clients. |
 | `.codex-plugin/plugin.json` | Native ChatGPT and Codex plugin manifest. |
 | `.app.json` | Maps the package to the official published OpenAI plugin. |
 | `.claude-plugin/plugin.json` | Claude Code plugin manifest. |
 | `.cursor-plugin/plugin.json` | Cursor Marketplace manifest. |
 | `.grok-plugin/plugin.json` | Grok Build marketplace manifest. |
+| `gemini-extension.json` | Gemini CLI extension manifest. |
 | `kimi.plugin.json` | Kimi Code plugin manifest. |
 | `skills/hcti-image-generation/` | Image generation and template workflow guidance. |
 | `skills/hcti-open-graph-images/` | Dynamic Open Graph image configuration guidance. |
+| `clawhub/html-css-to-image/` | Standalone OAuth/MCP rendering skill for ClawHub. |
+| `clawhub/hcti-open-graph-images/` | Standalone OAuth/MCP Open Graph skill for ClawHub. |
 
 ## ChatGPT and Codex
 
@@ -39,6 +43,18 @@ Run `/mcp-config login hcti` and complete authorization in your browser. Then us
 
 To test a local checkout, use `/plugins install /path/to/agent-plugins`. Kimi copies installed plugins into its managed plugin directory, so reinstall after changing the local source.
 
+## Gemini CLI
+
+Install the extension directly from GitHub:
+
+```bash
+gemini extensions install https://github.com/htmlcsstoimage/agent-plugins
+```
+
+Restart Gemini CLI, run `/extensions list` to confirm the extension is enabled, then run `/mcp auth hcti` and complete authorization in your browser. Use `/mcp list` to confirm the HCTI tools are connected. Gemini CLI automatically discovers the included HCTI Agent Skills.
+
+To test a local checkout during development, run `gemini extensions link /path/to/agent-plugins`, restart Gemini CLI, and inspect it with `/extensions list`.
+
 ## GitHub Copilot
 
 ### Install a local checkout
@@ -50,6 +66,10 @@ copilot plugin install /path/to/agent-plugins
 ```
 
 Start Copilot CLI and use `/plugin list`, `/skills list`, and `/mcp` to confirm that the plugin, skill, and HCTI server are available. Connect `hcti` from `/mcp` and complete authorization in your browser.
+
+## Cline
+
+Give Cline the repository's [`llms-install.md`](llms-install.md) to configure the hosted HCTI server, or add it manually as a remote **Streamable HTTP** server at `https://mcp.hcti.io`. Complete the OAuth authorization in your browser; no API key or local server installation is required.
 
 ## Claude Code
 
@@ -102,6 +122,41 @@ For another test cycle, replace the copied `html-css-to-image` directory with th
 The xAI plugin marketplace points to this repository at a pinned commit. Its Grok manifest reuses the root skill, MCP endpoint, and assets.
 
 After the marketplace entry is available, install **HTML/CSS to Image** in Grok Build, connect the `hcti` MCP server when prompted, and complete authorization in your browser.
+
+## ClawHub / OpenClaw
+
+The [ClawHub skill](clawhub/html-css-to-image/SKILL.md) supports HTML/CSS rendering, website screenshots, PDF output, and saved-template rendering through the hosted MCP server. Users connect to `https://mcp.hcti.io` using browser-based OAuth; no API keys are required. Rendering requires an HCTI account and available credits.
+
+The separate [Open Graph skill](clawhub/hcti-open-graph-images/SKILL.md) creates persistent dynamic social-preview configurations and integrates their image URLs into website metadata. It includes the webpage integration reference and uses the same OAuth connection.
+
+These standalone distributions live outside `skills/` so other clients do not discover duplicate skills. Their setup instructions register the server in OpenClaw and complete OAuth; installing a skill alone does not establish the connection. Publish only the skill folder, not the whole plugin repository.
+
+From this repository's root, with the current ClawHub CLI installed:
+
+```bash
+clawhub login
+clawhub skill publish ./clawhub/html-css-to-image \
+  --slug html-css-to-image \
+  --name "HTML/CSS to Image" \
+  --categories integrations,creative \
+  --topics "screenshots,html,css,pdf,images" \
+  --dry-run
+```
+
+Preview the Open Graph skill separately:
+
+```bash
+clawhub skill publish ./clawhub/hcti-open-graph-images \
+  --slug hcti-open-graph-images \
+  --name "HTML/CSS to Image — Dynamic Open Graph Images" \
+  --categories integrations,development \
+  --topics "open-graph,social-previews,seo,images,html" \
+  --dry-run
+```
+
+After reviewing each preview, run its publish command without `--dry-run`. To publish under an organization, add `--owner <your-clawhub-owner-handle>` to both commands; otherwise the authenticated user owns the listing. Publication is separate from committing this repository, and new releases may wait for automated review.
+
+ClawHub distributes published skills under MIT-0. Review those terms before the first publication; the hosted HCTI service remains subject to its own terms. See [ClawHub publishing](https://docs.openclaw.ai/clawhub/publishing) and [skill format](https://docs.openclaw.ai/clawhub/skill-format).
 
 ## Included capabilities
 
@@ -182,7 +237,9 @@ Our AI agent plugins are registered in the [HOL Plugin Registry](https://hol.org
 - [Official ChatGPT and Codex plugin](https://chatgpt.com/plugins/plugin_asdk_app_6a4d168031448191abcd6540497efb7b)
 - [OpenAI plugin packaging documentation](https://developers.openai.com/codex/plugins/build)
 - [Kimi Code plugin documentation](https://github.com/MoonshotAI/kimi-code/blob/main/docs/en/customization/plugins.md)
+- [Gemini CLI extension documentation](https://geminicli.com/docs/extensions/)
 - [GitHub Copilot plugin documentation](https://docs.github.com/en/copilot/concepts/agents/about-plugins)
+- [Cline MCP installation instructions](llms-install.md)
 - [Cursor plugin documentation](https://cursor.com/docs/plugins)
 - [Cursor plugin reference](https://cursor.com/docs/reference/plugins)
 - [Claude Code plugin documentation](https://code.claude.com/docs/en/plugins)

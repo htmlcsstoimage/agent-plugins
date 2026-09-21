@@ -426,6 +426,53 @@ async function validateKimiAdapter(expectedName, expectedVersion) {
   }
 }
 
+async function validateGeminiAdapter(expectedName, expectedVersion) {
+  const manifestPath = path.join(repoRoot, "gemini-extension.json");
+  const manifest = await readJsonFile(manifestPath, "Gemini CLI extension manifest");
+  if (!manifest) {
+    return;
+  }
+
+  if (typeof manifest.name !== "string" || !marketplaceNamePattern.test(manifest.name)) {
+    addError("Gemini CLI extension name must be lowercase kebab-case.");
+  } else if (manifest.name !== expectedName) {
+    addError(`Gemini CLI extension name "${manifest.name}" does not match "${expectedName}".`);
+  }
+
+  for (const field of ["version", "description"]) {
+    if (typeof manifest[field] !== "string" || manifest[field].trim().length === 0) {
+      addError(`Gemini CLI extension: "${field}" is required.`);
+    }
+  }
+
+  if (manifest.version !== expectedVersion) {
+    addError(
+      `Gemini CLI extension version "${manifest.version}" does not match adapter version "${expectedVersion}".`
+    );
+  }
+
+  if (!manifest.mcpServers || typeof manifest.mcpServers !== "object" || Array.isArray(manifest.mcpServers)) {
+    addError('Gemini CLI extension must contain an "mcpServers" object.');
+    return;
+  }
+
+  const hctiServer = manifest.mcpServers.hcti;
+  if (!hctiServer || typeof hctiServer !== "object" || Array.isArray(hctiServer)) {
+    addError('Gemini CLI extension must declare the "hcti" MCP server.');
+    return;
+  }
+
+  if (hctiServer.type !== "http") {
+    addError('Gemini CLI MCP server "hcti" must use type "http" for Streamable HTTP.');
+  }
+  if (typeof hctiServer.url !== "string" || !hctiServer.url.startsWith("https://")) {
+    addError('Gemini CLI MCP server "hcti" must use an HTTPS URL.');
+  }
+  if (hctiServer.command || hctiServer.headers || hctiServer.env) {
+    addError('Gemini CLI MCP server "hcti" must use hosted OAuth without a local command, headers, or environment variables.');
+  }
+}
+
 async function main() {
   const marketplacePath = path.join(repoRoot, ".cursor-plugin", "marketplace.json");
   const rootManifestPath = path.join(repoRoot, ".cursor-plugin", "plugin.json");
@@ -441,6 +488,7 @@ async function main() {
       await validatePluginDirectory(repoRoot, expectedName, rootManifest);
       await validateClaudeAdapter(expectedName);
       await validateKimiAdapter(expectedName, rootManifest.version);
+      await validateGeminiAdapter(expectedName, rootManifest.version);
     }
     summarizeAndExit();
     return;
