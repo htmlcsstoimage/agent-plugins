@@ -329,6 +329,12 @@ async function validateClaudeAdapter(expectedName) {
     addError('Claude plugin: "author.name" is required.');
   }
 
+  for (const field of ["documentationUrl", "supportUrl", "privacyPolicyUrl", "termsOfServiceUrl"]) {
+    if (typeof manifest[field] !== "string" || !manifest[field].startsWith("https://")) {
+      addError(`Claude plugin: "${field}" must use HTTPS.`);
+    }
+  }
+
   if (!Array.isArray(manifest.keywords) || manifest.keywords.length === 0) {
     addError('Claude plugin: "keywords" must be a non-empty array.');
   }
@@ -468,8 +474,12 @@ async function validateGeminiAdapter(expectedName, expectedVersion) {
   if (typeof hctiServer.url !== "string" || !hctiServer.url.startsWith("https://")) {
     addError('Gemini CLI MCP server "hcti" must use an HTTPS URL.');
   }
-  if (hctiServer.command || hctiServer.headers || hctiServer.env) {
-    addError('Gemini CLI MCP server "hcti" must use hosted OAuth without a local command, headers, or environment variables.');
+  const allowedServerFields = new Set(["type", "url", "description"]);
+  const unsupportedServerFields = Object.keys(hctiServer).filter((field) => !allowedServerFields.has(field));
+  if (unsupportedServerFields.length > 0) {
+    addError(
+      `Gemini CLI MCP server "hcti" must use hosted OAuth without local credential configuration; unsupported fields: ${unsupportedServerFields.join(", ")}.`
+    );
   }
 }
 

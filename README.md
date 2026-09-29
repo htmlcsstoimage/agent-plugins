@@ -221,7 +221,7 @@ claude plugin validate . --strict
 
 ### Verified compatibility
 
-Tested with Claude Code 2.1.258. The strict plugin validator passes, Claude discovers the shared HCTI skill and MCP server, and the browser-based OAuth flow connects successfully.
+The plugin runtime, shared HCTI skills, MCP discovery, and browser-based OAuth flow were tested with Claude Code 2.1.258. Use Claude Code 2.1.281 or newer for strict validation of directory listing metadata such as `privacyPolicyUrl`.
 
 The Grok adapter is validated by the xAI marketplace's catalog and component-index checks against the pinned commit.
 

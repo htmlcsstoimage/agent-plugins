@@ -9,7 +9,11 @@
     "email": "support@htmlcsstoimage.com",
     "url": "https://htmlcsstoimage.com"
   },
-  "homepage": "https://docs.htmlcsstoimage.com/integrations/mcp/",
+  "homepage": "https://htmlcsstoimage.com/",
+  "documentationUrl": "https://docs.htmlcsstoimage.com/integrations/mcp/",
+  "supportUrl": "https://htmlcsstoimage.com/contact",
+  "privacyPolicyUrl": "https://htmlcsstoimage.com/privacy",
+  "termsOfServiceUrl": "https://htmlcsstoimage.com/terms",
   "repository": "https://github.com/htmlcsstoimage/agent-plugins",
   "license": "MIT",
   "keywords": [
