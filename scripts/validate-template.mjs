@@ -2,9 +2,9 @@
 
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import process from "node:process";
+import { fileURLToPath } from "node:url";
 
-const repoRoot = process.cwd();
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const errors = [];
 const warnings = [];
 
@@ -603,7 +603,7 @@ function summarizeAndExit() {
     for (const error of errors) {
       console.error(`- ${error}`);
     }
-    process.exit(1);
+    throw new Error("Repository validation failed.");
   }
 
   console.log("Validation passed.");
