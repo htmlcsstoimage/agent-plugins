@@ -22,68 +22,56 @@ Use the same pathname as the source page. Do not include the source origin again
 
 ## Screenshot configuration example
 
-For an `html_css` configuration with `extract_values: true`, place the standard preview metadata and HCTI rendering metadata in the initial HTML `<head>`:
+For an `html_css` configuration with `extract_values: true`, place standard preview metadata and HCTI rendering metadata in the initial HTML head section. Create one `meta` element for each row:
 
-```html
-<head>
-  <meta property="og:title" content="Product launch">
-  <meta property="og:description" content="See what is new in this release.">
-  <meta property="og:image" content="https://hcti.io/v1/og/DOMAIN_ID/articles/product-launch">
-  <meta property="og:image:alt" content="Product launch announcement">
+| Attribute | Key | Content |
+| --- | --- | --- |
+| `property` | `og:title` | `Product launch` |
+| `property` | `og:description` | `See what is new in this release.` |
+| `property` | `og:image` | `https://hcti.io/v1/og/DOMAIN_ID/articles/product-launch` |
+| `property` | `og:image:alt` | `Product launch announcement` |
+| `property` | `hcti:selector` | `#social-card` |
+| `property` | `hcti:viewport_width` | `1200` |
+| `property` | `hcti:viewport_height` | `630` |
 
-  <meta property="hcti:selector" content="#social-card">
-  <meta property="hcti:viewport_width" content="1200">
-  <meta property="hcti:viewport_height" content="630">
-</head>
-```
+The matching page must contain a `section` element whose `id` is `social-card`, with the content HCTI should capture inside it.
 
-The matching page must contain the selected element:
-
-```html
-<section id="social-card">
-  <!-- Content HCTI should capture -->
-</section>
-```
-
-Use `property` for the examples below. HCTI also accepts `name` for `hcti:*` fields. Keep these tags inside `<head>` and render them into the server response; HCTI does not rely on client-side JavaScript to discover them.
+Use the `property` attribute for the examples below. HCTI also accepts the `name` attribute for `hcti:*` fields. Keep these elements inside the HTML head section and render them into the server response; HCTI does not rely on client-side JavaScript to discover them.
 
 ## Template configuration example
 
-For a `templated` configuration, publish template values using `html:tv:{template_key}`:
+For a `templated` configuration, publish template values using `html:tv:{template_key}`. Create one `meta` element for each row:
 
-```html
-<head>
-  <meta property="og:title" content="Product launch">
-  <meta property="og:description" content="See what is new in this release.">
-  <meta property="og:image" content="https://hcti.io/v1/og/DOMAIN_ID/articles/product-launch">
-  <meta property="og:image:alt" content="Product launch announcement">
-
-  <meta property="html:tv:headline" content="Product launch">
-  <meta property="html:tv:author.name" content="Ada Lovelace">
-</head>
-```
+| Attribute | Key | Content |
+| --- | --- | --- |
+| `property` | `og:title` | `Product launch` |
+| `property` | `og:description` | `See what is new in this release.` |
+| `property` | `og:image` | `https://hcti.io/v1/og/DOMAIN_ID/articles/product-launch` |
+| `property` | `og:image:alt` | `Product launch announcement` |
+| `property` | `html:tv:headline` | `Product launch` |
+| `property` | `html:tv:author.name` | `Ada Lovelace` |
 
 Dots in the template key create nested values, so `html:tv:author.name` supplies `author.name`. A content value is parsed as JSON when it is valid JSON; otherwise it remains a string.
 
 A configuration mapping can reuse existing metadata instead of requiring an `html:tv:*` tag. Examples:
 
-- Map `headline` with `fallback: titles` to use `<title>`, `og:title`, or `twitter:title` in that order.
+- Map `headline` with `fallback: titles` to use the document title element, `og:title`, or `twitter:title` in that order.
 - Map `summary` with `fallback: descriptions` to use `description`, `og:description`, or `twitter:description` in that order.
-- Map `price` with `meta_key: product:price` and publish `<meta property="product:price" content="$19.00">`.
+- Map `price` with `meta_key: product:price` and publish a `meta` element whose `property` is `product:price` and whose content is `$19.00`.
 
 When both a mapping and `html:tv:*` provide the same template key, the direct `html:tv:*` value wins.
 
 ## Twitter Card metadata
 
-Use the same HCTI endpoint for Twitter/X previews. Standard Twitter fields conventionally use `name`:
+Use the same HCTI endpoint for Twitter/X previews. Standard Twitter fields conventionally use the `name` attribute. Create one `meta` element for each row:
 
-```html
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Product launch">
-<meta name="twitter:description" content="See what is new in this release.">
-<meta name="twitter:image" content="https://hcti.io/v1/og/DOMAIN_ID/articles/product-launch">
-<meta name="twitter:image:alt" content="Product launch announcement">
-```
+| Name | Content |
+| --- | --- |
+| `twitter:card` | `summary_large_image` |
+| `twitter:title` | `Product launch` |
+| `twitter:description` | `See what is new in this release.` |
+| `twitter:image` | `https://hcti.io/v1/og/DOMAIN_ID/articles/product-launch` |
+| `twitter:image:alt` | `Product launch announcement` |
 
 The configuration's `optimization_mode` controls whether HCTI preserves one size, post-processes one render, or renders with crawler-specific viewports.
 
@@ -147,7 +135,7 @@ Only publish `og:image:width`, `og:image:height`, and `og:image:type` when those
 
 ## Verification checklist
 
-- Fetch the source page and confirm the tags appear in the initial `<head>`.
+- Fetch the source page and confirm the tags appear in the initial HTML head section.
 - Confirm the HCTI URL uses `domain_id`, not the management `id`.
 - Confirm its pathname matches the source page pathname.
 - Open the HCTI image URL directly and inspect the rendered result.
