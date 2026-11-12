@@ -207,12 +207,6 @@ The plugin files in this repository are available under the [MIT License](LICENS
 
 ## Validate
 
-Run the repository checks:
-
-```bash
-node scripts/validate-template.mjs
-```
-
 Validate the Claude adapter with Claude Code's official strict validator:
 
 ```bash

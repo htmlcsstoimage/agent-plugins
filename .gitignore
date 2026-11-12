@@ -12,3 +12,6 @@
 *.log
 tmp/
 temp/
+
+# Local repository validation helper (not part of the published plugin)
+scripts/validate-template.mjs
