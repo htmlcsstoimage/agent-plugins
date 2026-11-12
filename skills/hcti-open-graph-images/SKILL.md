@@ -16,7 +16,7 @@ Tool names may be prefixed by the client; select them by the suffixes below. Ins
 3. Call `create_og_config` and retain both returned identifiers:
    - `id` manages the configuration with `get_og_config`, `update_og_config`, and `delete_og_config`.
    - `domain_id` belongs in the public image URL used by the website.
-4. Read [references/webpage-integration.md](references/webpage-integration.md), then add the appropriate tags to every source page's server-rendered HTML head section.
+4. Read [references/webpage-integration.md](references/webpage-integration.md), then add the appropriate tags to every source page's server-rendered `<head>`.
 5. Build each image URL as `https://hcti.io/v1/og/{domain_id}{pathname}`. The pathname must match the source page under the configuration's `base_url`.
 6. Open the HCTI image URL directly and verify the rendered result before treating the integration as complete.
 
@@ -27,12 +27,11 @@ Source page: https://example.com/articles/product-launch
 Image URL:   https://hcti.io/v1/og/DOMAIN_ID/articles/product-launch
 ```
 
-The corresponding page metadata is a `meta` element with these attributes:
+The corresponding page tag is:
 
-| Attribute | Value |
-| --- | --- |
-| `property` | `og:image` |
-| `content` | `https://hcti.io/v1/og/DOMAIN_ID/articles/product-launch` |
+```html
+<meta property="og:image" content="https://hcti.io/v1/og/DOMAIN_ID/articles/product-launch">
+```
 
 Do not substitute the configuration `id` for `domain_id`. Query strings do not identify a new image; change `hcti:content_version` when the same pathname needs a new render because otherwise-invisible content changed.
 
@@ -56,7 +55,7 @@ Use `config_type: templated` to render an existing HCTI template with values ext
 - Pages can publish values directly with `html:tv:{template_key}` tags.
 - `template_values_mapping` can map a standard or custom metadata field into a template key. Each mapping must supply exactly one `meta_key` or `fallback`.
 - Direct `html:tv:*` values override mapped values for the same template key.
-- The `titles` fallback checks the document title element, then `og:title`, then `twitter:title`. The `descriptions` fallback checks `description`, then `og:description`, then `twitter:description`.
+- The `titles` fallback checks the document `<title>`, then `og:title`, then `twitter:title`. The `descriptions` fallback checks `description`, then `og:description`, then `twitter:description`.
 
 ## Connect supporting resources
 
@@ -85,7 +84,7 @@ Do not publish fixed `og:image:width` or `og:image:height` values when the endpo
 After creating or updating a configuration:
 
 1. Confirm that the configuration is enabled and that its stored `base_url`, rendering mode, and referenced resource IDs are correct.
-2. Confirm that the source page is publicly reachable over HTTPS and its metadata appears in the initial HTML head section, not only after client-side JavaScript runs.
+2. Confirm that the source page is publicly reachable over HTTPS and its metadata appears in the initial HTML `<head>`, not only after client-side JavaScript runs.
 3. Open the constructed `https://hcti.io/v1/og/...` URL directly and inspect the returned image.
 4. If the image is stale, check the configuration's refresh interval, the source page's cache headers or ETag, and `hcti:content_version` before changing the image URL.
 5. Remember that social platforms can retain their own cache after the HCTI image changes.
