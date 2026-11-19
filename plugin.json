@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "html-css-to-image",
-  "version": "0.2.0",
-  "description": "Let AI agents capture live website screenshots, render HTML/CSS, and populate reusable templates as images or PDFs - without managing a browser.",
+  "version": "0.3.0",
+  "description": "Create images, PDFs, and HTML-to-video animations; record scrolling websites; and render reusable templates with HTML/CSS to Image.",
   "author": {
     "name": "HTML/CSS to Image",
     "email": "support@htmlcsstoimage.com",
@@ -18,6 +18,10 @@
     "screenshots",
     "html",
     "css",
-    "pdf"
+    "pdf",
+    "recordings",
+    "html-to-video",
+    "video-generation",
+    "visual-qa"
   ]
 }

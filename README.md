@@ -1,6 +1,6 @@
 # HTML/CSS to Image API for AI agents
 
-Let AI agents capture live website screenshots, render HTML/CSS, and populate reusable templates as images or PDFs—without managing a browser.
+Let AI agents create images and PDFs, turn structured HTML/CSS into marketing videos, record scrolling website walkthroughs, and populate reusable image templates—without managing a browser.
 
 This repository is a portable [Agent Plugin](https://agent-plugins.org/) package with client-specific manifests for the hosted HCTI MCP server at `https://mcp.hcti.io`. Authentication uses HCTI's browser-based OAuth flow; no API key or access token is stored in this repository.
 
@@ -21,14 +21,18 @@ This repository is a portable [Agent Plugin](https://agent-plugins.org/) package
 | `kimi.plugin.json` | Kimi Code plugin manifest. |
 | `skills/hcti-image-generation/` | Image generation and template workflow guidance. |
 | `skills/hcti-open-graph-images/` | Dynamic Open Graph image configuration guidance. |
+| `skills/hcti-marketing-videos/` | Structured HTML/CSS marketing videos and animated graphics. |
+| `skills/hcti-website-recordings/` | Scrolling website walkthroughs and evidence-based visual reviews. |
 | `clawhub/html-css-to-image/` | Standalone OAuth/MCP rendering skill for ClawHub. |
 | `clawhub/hcti-open-graph-images/` | Standalone OAuth/MCP Open Graph skill for ClawHub. |
+| `clawhub/hcti-marketing-videos/` | Standalone OAuth/MCP marketing-video skill for ClawHub. |
+| `clawhub/hcti-website-recordings/` | Standalone OAuth/MCP website-recording skill for ClawHub. |
 
 ## ChatGPT and Codex
 
 Install the official [HTML/CSS to Image plugin](https://chatgpt.com/plugins/plugin_asdk_app_6a4d168031448191abcd6540497efb7b) from the Plugins Directory in ChatGPT or Codex. This is the preferred OpenAI integration and uses HCTI's registered MCP connection with browser-based OAuth.
 
-The native `.codex-plugin/plugin.json` manifest packages the shared HCTI skill, while `.app.json` maps the package to the published OpenAI plugin.
+The native `.codex-plugin/plugin.json` manifest packages the shared HCTI skills, while `.app.json` maps the package to the published OpenAI plugin.
 
 ## Kimi Code
 
@@ -129,6 +133,8 @@ The [ClawHub skill](clawhub/html-css-to-image/SKILL.md) supports HTML/CSS render
 
 The separate [Open Graph skill](clawhub/hcti-open-graph-images/SKILL.md) creates persistent dynamic social-preview configurations and integrates their image URLs into website metadata. It includes the webpage integration reference and uses the same OAuth connection.
 
+The [marketing-video skill](clawhub/hcti-marketing-videos/SKILL.md) authors structured HTML/CSS animations and records them as video or GIF. The [website-recording skill](clawhub/hcti-website-recordings/SKILL.md) captures scrolling walkthroughs and supports visual reviews with recorded evidence. Both include standalone OAuth setup and the same workflow references as their shared plugin counterparts.
+
 These standalone distributions live outside `skills/` so other clients do not discover duplicate skills. Their setup instructions register the server in OpenClaw and complete OAuth; installing a skill alone does not establish the connection. Publish only the skill folder, not the whole plugin repository.
 
 From this repository's root, with the current ClawHub CLI installed:
@@ -156,6 +162,24 @@ clawhub skill publish ./clawhub/hcti-open-graph-images \
 
 After reviewing each preview, run its publish command without `--dry-run`. To publish under an organization, add `--owner <your-clawhub-owner-handle>` to both commands; otherwise the authenticated user owns the listing. Publication is separate from committing this repository, and new releases may wait for automated review.
 
+Preview the recording skills with the same publishing workflow:
+
+```bash
+clawhub skill publish ./clawhub/hcti-marketing-videos \
+  --slug hcti-marketing-videos \
+  --name "HTML/CSS to Image — Marketing Videos" \
+  --categories integrations,creative \
+  --topics "html-to-video,recordings,marketing,html,css" \
+  --dry-run
+
+clawhub skill publish ./clawhub/hcti-website-recordings \
+  --slug hcti-website-recordings \
+  --name "HTML/CSS to Image — Website Recordings" \
+  --categories integrations,development \
+  --topics "recordings,screenshots,visual-qa,websites" \
+  --dry-run
+```
+
 ClawHub distributes published skills under MIT-0. Review those terms before the first publication; the hosted HCTI service remains subject to its own terms. See [ClawHub publishing](https://docs.openclaw.ai/clawhub/publishing) and [skill format](https://docs.openclaw.ai/clawhub/skill-format).
 
 ## Included capabilities
@@ -173,6 +197,22 @@ The core rendering and template tools are:
 | `update_template` | Update an existing template. |
 | `list_templates` | List templates in the authorized account. |
 | `list_template_versions` | Inspect a template's version history. |
+
+Recording tools return URLs and metadata before capture completes:
+
+| Tool | Purpose |
+| --- | --- |
+| `create_htmlcss_recording` | Turn HTML, CSS, and JavaScript into MP4, WebM, or animated GIF. |
+| `create_url_recording` | Record a website with scrolling, clicks, and pauses. |
+| `get_recording_status` | Check progress, attempts, errors, and the media URL. |
+| `get_recording` | Inspect saved source and recording settings. |
+| `list_recordings` | Find existing recordings in the connected organization. |
+| `store_recording` | Start a deferred recording or store it using its configured destination. |
+| `delete_recording` | Delete an explicitly unwanted recording and its HCTI-hosted media. |
+
+The [marketing-video skill](skills/hcti-marketing-videos/SKILL.md) covers scene structure, readable timing, capture-synchronized animations, and output review. The [website-recording skill](skills/hcti-website-recordings/SKILL.md) covers scrolling and section captures, lazy-loading preparation, and reporting visible defects with supporting evidence. Both use the server's `hcti://docs/recording-authoring` resource when available and inspect the active tool schemas for current options.
+
+Recordings have no audio. Creation success does not mean the media is ready; use the returned ID with `get_recording_status`, rather than creating duplicates to check progress. A visual review reports what was actually inspected and does not replace accessibility or functional testing.
 
 ## Managing resources with MCP
 
@@ -196,10 +236,13 @@ Resource tools operate on the HCTI organization selected during OAuth authorizat
 - "List my HCTI templates and render the social-card template with this headline."
 - "Create five product-card variations with different accent colors."
 - "Create a dynamic Open Graph configuration for `https://example.com` using my social-card template and map its title and description from page metadata."
+- "Create a six-second product-launch video from structured HTML/CSS using these brand colors and this headline."
+- "Record a scrolling walkthrough of this pricing page and check whether the sticky header overlaps any content."
+- "Review this public mobile preview for clipping and lazy-loading issues, and include frames supporting any findings."
 
 ## Data handling
 
-Requests sent through the plugin are processed by the hosted HTML/CSS to Image service. HTML, CSS, template values, target URLs, rendering options, and resource configuration supplied to HCTI are sent to that service; persistent resources are stored in the connected HCTI organization. Do not provide cookies, authorization headers, private URLs, or other secrets unless intentionally configuring an authorized rendering workflow and you understand that HCTI will process that data.
+Requests sent through the plugin are processed by the hosted HTML/CSS to Image service. HTML, CSS, JavaScript, recording actions, template values, target URLs, rendering options, and resource configuration supplied to HCTI are sent to that service; persistent resources are stored in the connected HCTI organization. Do not provide cookies, authorization headers, private URLs, or other secrets unless intentionally configuring an authorized rendering workflow and you understand that HCTI will process that data.
 
 ## License and service terms
 
